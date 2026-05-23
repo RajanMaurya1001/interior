@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navkaar Neev Studio — Architecture | Interiors | Design</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        :root {
+            --cream: #F5F0EB;
+            --warm-white: #FAF8F5;
+            --charcoal: #1A1A1A;
+            --taupe: #8B7E74;
+            --warm-gray: #A0958A;
+            --accent: #C4A882;
+            --dark-bg: #0F0F0F;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--warm-white);
+            color: var(--charcoal);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            padding: 24px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            transition: all 0.4s ease;
+        }
+        nav.scrolled {
+            background: rgba(250,248,245,0.95);
+            backdrop-filter: blur(20px);
+            padding: 16px 48px;
+            box-shadow: 0 1px 20px rgba(0,0,0,0.08);
+        }
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--charcoal);
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 0; height: 1px;
+            background: var(--charcoal);
+            transition: width 0.3s ease;
+        }
+        .nav-links a:hover::after { width: 100%; }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1920&q=80') center/cover;
+        }
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(
+                135deg, 
+                rgba(0,0,0,0.55) 0%, 
+                rgba(0,0,0,0.4) 40%, 
+                rgba(0,0,0,0.6) 100%
+            );
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 900px;
+            padding: 0 24px;
+        }
+        .hero-label {
+            font-size: 0.8rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.85);
+            margin-bottom: 24px;
+            opacity: 0;
+            transform: translateY(20px);
+            font-weight: 500;
+        }
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.8rem, 6vw, 5.5rem);
+            font-weight: 400;
+            line-height: 1.05;
+            margin-bottom: 28px;
+            opacity: 0;
+            transform: translateY(30px);
+            color: #FFFFFF;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+        .hero-title em {
+            font-style: italic;
+            font-weight: 500;
+            color: #E8D5B7;
+        }
+        .hero-desc {
+            font-size: 1.15rem;
+            color: rgba(255,255,255,0.85);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.7;
+            font-weight: 300;
+            opacity: 0;
+            transform: translateY(20px);
+            text-shadow: 0 1px 10px rgba(0,0,0,0.3);
+        }
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 44px;
+            background: #FFFFFF;
+            color: var(--charcoal);
+            text-decoration: none;
+            font-size: 0.85rem;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        .hero-cta:hover {
+            background: var(--accent);
+            color: #FFFFFF;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(196,168,130,0.4);
+        }
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            opacity: 0;
+            z-index: 2;
+        }
+        .scroll-indicator span {
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.7);
+        }
+        .scroll-line {
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.6), transparent);
+            animation: scrollPulse 2s ease-in-out infinite;
+        }
+        @keyframes scrollPulse {
+            0%, 100% { opacity: 0.3; transform: scaleY(0.5); }
+            50% { opacity: 1; transform: scaleY(1); }
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+            border-top: 1px solid rgba(0,0,0,0.08);
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+            background: var(--warm-white);
+        }
+        .stat-item {
+            padding: 60px 40px;
+            text-align: center;
+            border-right: 1px solid rgba(0,0,0,0.08);
+        }
+        .stat-item:last-child { border-right: none; }
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 600;
+            color: var(--charcoal);
+            margin-bottom: 8px;
+        }
+        .stat-label {
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--taupe);
+        }
+
+        /* Philosophy Section */
+        .philosophy {
+            padding: 140px 48px;
+            background: var(--warm-white);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .philosophy-text h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: 32px;
+        }
+        .philosophy-text h2 em {
+            font-style: italic;
+            color: var(--accent);
+        }
+        .philosophy-text p {
+            font-size: 1.05rem;
+            color: var(--warm-gray);
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+        .philosophy-visual {
+            position: relative;
+            height: 600px;
+        }
+        .philosophy-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+            filter: saturate(0.85);
+        }
+        .philosophy-accent {
+            position: absolute;
+            bottom: -30px;
+            left: -30px;
+            width: 200px;
+            height: 200px;
+            background: var(--accent);
+            opacity: 0.15;
+            border-radius: 4px;
+            z-index: -1;
+        }
+
+        /* ===== PROJECTS SECTION ===== */
+        .projects {
+            padding: 140px 48px;
+            background: var(--dark-bg);
+            color: var(--warm-white);
+        }
+        .projects-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+        .projects-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 400;
+            margin-bottom: 16px;
+        }
+        .projects-header p {
+            color: var(--warm-gray);
+            font-size: 1.05rem;
+            font-weight: 300;
+        }
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .project-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+            cursor: pointer;
+            aspect-ratio: 3/4;
+            background: #1a1a1a;
+        }
+        .project-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease, filter 0.5s ease;
+            filter: brightness(0.75);
+            display: block;
+        }
+        .project-card:hover img {
+            transform: scale(1.08);
+            filter: brightness(0.5);
+        }
+        .project-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 40px 30px;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.5s ease;
+            z-index: 2;
+        }
+        .project-card:hover .project-info {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .project-tag {
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+        .project-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 500;
+        }
+
+        /* ===== SERVICES SECTION - FULLY FIXED WITH DUMMY CONTENT ===== */
+        .services {
+            padding: 140px 48px;
+            background: var(--cream);
+        }
+        .services-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+        .services-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 400;
+            margin-bottom: 16px;
+        }
+        .services-header p {
+            color: var(--warm-gray);
+            font-size: 1.05rem;
+            font-weight: 300;
+            margin-top: 12px;
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .service-card {
+            background: var(--warm-white);
+            padding: 48px 36px;
+            border-radius: 8px;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(0,0,0,0.06);
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 4px;
+            background: var(--accent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 70px rgba(0,0,0,0.12);
+            border-color: rgba(196,168,130,0.3);
+        }
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent), #D4B896);
+            border-radius: 16px;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            box-shadow: 0 8px 25px rgba(196,168,130,0.25);
+        }
+        .service-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 500;
+            margin-bottom: 18px;
+            color: var(--charcoal);
+        }
+        .service-card p {
+            color: var(--warm-gray);
+            line-height: 1.8;
+            font-size: 0.95rem;
+            font-weight: 300;
+            margin-bottom: 24px;
+        }
+        .service-features {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .service-features li {
+            font-size: 0.85rem;
+            color: var(--taupe);
+            padding: 6px 0;
+            padding-left: 20px;
+            position: relative;
+            border-bottom: 1px solid rgba(0,0,0,0.04);
+        }
+        .service-features li:last-child {
+            border-bottom: none;
+        }
+        .service-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* ===== TEAM SECTION ===== */
+        .team {
+            padding: 140px 48px;
+            background: var(--warm-white);
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+        .team-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+        .team-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 400;
+            margin-bottom: 16px;
+        }
+        .team-header h2 em {
+            font-style: italic;
+            color: var(--accent);
+        }
+        .team-header p {
+            color: var(--warm-gray);
+            font-size: 1.05rem;
+            font-weight: 300;
+            margin-top: 12px;
+        }
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .team-card {
+            background: var(--cream);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(0,0,0,0.06);
+            text-align: left;
+            position: relative;
+        }
+        .team-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 4px;
+            background: var(--accent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+            z-index: 5;
+        }
+        .team-card:hover::before {
+            transform: scaleX(1);
+        }
+        .team-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 70px rgba(0,0,0,0.12);
+            border-color: rgba(196,168,130,0.3);
+        }
+        .team-img-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4/5;
+            overflow: hidden;
+            background: #1a1a1a;
+        }
+        .team-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease, filter 0.5s ease;
+            display: block;
+        }
+        .team-card:hover .team-img {
+            transform: scale(1.06);
+        }
+        .team-info {
+            padding: 30px 24px;
+            background: var(--cream);
+        }
+        .team-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: var(--charcoal);
+        }
+        .team-role {
+            font-size: 0.75rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 14px;
+            display: block;
+        }
+        .team-bio {
+            color: var(--warm-gray);
+            line-height: 1.6;
+            font-size: 0.9rem;
+            font-weight: 300;
+        }
+
+        /* Testimonial */
+        .testimonial {
+            padding: 140px 48px;
+            background: var(--warm-white);
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .testimonial-quote {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            font-style: italic;
+            font-weight: 400;
+            line-height: 1.5;
+            margin-bottom: 40px;
+            color: var(--charcoal);
+        }
+        .testimonial-author {
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--taupe);
+        }
+        .testimonial-line {
+            width: 60px;
+            height: 1px;
+            background: var(--accent);
+            margin: 30px auto;
+        }
+
+        /* Contact / CTA */
+        .contact {
+            padding: 140px 48px;
+            background: var(--charcoal);
+            color: var(--warm-white);
+            text-align: center;
+        }
+        .contact h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 400;
+            margin-bottom: 24px;
+        }
+        .contact h2 em {
+            font-style: italic;
+            color: var(--accent);
+        }
+        .contact p {
+            color: var(--warm-gray);
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin: 0 auto 50px;
+            line-height: 1.7;
+            font-weight: 300;
+        }
+        .contact-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 50px;
+            background: var(--warm-white);
+            color: var(--charcoal);
+            text-decoration: none;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.4s ease;
+        }
+        .contact-btn:hover {
+            background: var(--accent);
+            color: var(--warm-white);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(196,168,130,0.3);
+        }
+        .contact-details {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 60px;
+            font-size: 0.85rem;
+            color: var(--warm-gray);
+            letter-spacing: 1px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 48px;
+            background: var(--dark-bg);
+            color: var(--warm-gray);
+            text-align: center;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .philosophy { grid-template-columns: 1fr; }
+            .projects-grid { grid-template-columns: repeat(2, 1fr); }
+            .services-grid { grid-template-columns: repeat(2, 1fr); }
+            .team-grid { grid-template-columns: repeat(2, 1fr); }
+            .stats-bar { grid-template-columns: repeat(2, 1fr); }
+            .stat-item:nth-child(2) { border-right: none; }
+            .stat-item:nth-child(1), .stat-item:nth-child(2) { border-bottom: 1px solid rgba(0,0,0,0.08); }
+        }
+        @media (max-width: 768px) {
+            nav { padding: 16px 24px; }
+            .nav-links { display: none; }
+            .hero-title { font-size: 2.5rem; }
+            .hero-desc { font-size: 1rem; }
+            .projects-grid { grid-template-columns: 1fr; }
+            .services-grid { grid-template-columns: 1fr; }
+            .team-grid { grid-template-columns: 1fr; }
+            .stats-bar { grid-template-columns: 1fr; }
+            .stat-item { border-right: none; border-bottom: 1px solid rgba(0,0,0,0.08); }
+            .contact-details { flex-direction: column; gap: 16px; }
+            .philosophy-visual { height: 400px; }
+            .service-card { padding: 36px 28px; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">Navkaar Neev</div>
+        <ul class="nav-links">
+            <li><a href="#philosophy">Philosophy</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#team">Experts</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <div class="hero-label">Architecture · Interiors · Design</div>
+            <h1 class="hero-title">Where Structure<br>Meets <em>Soul</em></h1>
+            <p class="hero-desc">Defining modern living through soulful spaces. We craft interiors that breathe — where every line, texture, and light tells your story.</p>
+            <a href="#projects" class="hero-cta">Explore Our Work →</a>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <section class="stats-bar">
+        <div class="stat-item">
+            <div class="stat-number">150+</div>
+            <div class="stat-label">Projects Completed</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">12</div>
+            <div class="stat-label">Years of Excellence</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">50+</div>
+            <div class="stat-label">Happy Families</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">8</div>
+            <div class="stat-label">Design Awards</div>
+        </div>
+    </section>
+
+    <section class="philosophy" id="philosophy">
+        <div class="philosophy-text">
+            <h2>Spaces That<br><em>Resonate</em></h2>
+            <p>At Navkaar Neev, we believe a home is more than walls and furniture — it's the canvas of your life. Our approach blends architectural precision with emotional intuition.</p>
+            <p>Every project begins with listening. We understand your rhythm, your light, your quiet moments. Then we design spaces that don't just look beautiful — they feel like home.</p>
+            <p>From intimate apartments to sprawling villas, we bring the same philosophy: <strong>structure meets style, and every detail serves the soul.</strong></p>
+        </div>
+        <div class="philosophy-visual">
+            <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=800&q=80" alt="Interior Design" class="philosophy-img">
+            <div class="philosophy-accent"></div>
+        </div>
+    </section>
+
+    <section class="projects" id="projects">
+        <div class="projects-header">
+            <h2>Curated <em>Spaces</em></h2>
+            <p>A selection of our transformative interior journeys</p>
+        </div>
+        <div class="projects-grid">
+            <div class="project-card">
+                <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&q=80" alt="Living Room" loading="lazy">
+                <div class="project-info">
+                    <div class="project-tag">Residential</div>
+                    <div class="project-title">The Urban Sanctuary</div>
+                </div>
+            </div>
+            <div class="project-card">
+                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80" alt="Dining Area" loading="lazy">
+                <div class="project-info">
+                    <div class="project-tag">Dining</div>
+                    <div class="project-title">Golden Hour Dining</div>
+                </div>
+            </div>
+            <div class="project-card">
+                <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=600&q=80" alt="Bedroom" loading="lazy">
+                <div class="project-info">
+                    <div class="project-tag">Bedroom</div>
+                    <div class="project-title">Serene Retreat</div>
+                </div>
+            </div>
+            <div class="project-card">
+                <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=600&q=80" alt="Kitchen" loading="lazy">
+                <div class="project-info">
+                    <div class="project-tag">Kitchen</div>
+                    <div class="project-title">The Heart of Home</div>
+                </div>
+            </div>
+            <div class="project-card">
+                <img src="https://images.unsplash.com/photo-1600573472550-8090b5e0745e?w=600&q=80" alt="Office" loading="lazy">
+                <div class="project-info">
+                    <div class="project-tag">Commercial</div>
+                    <div class="project-title">Creative Workspace</div>
+                </div>
+            </div>
+            <div class="project-card">
+                <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=600&q=80" alt="Bathroom" loading="lazy">
+                <div class="project-info">
+                    <div class="project-tag">Wellness</div>
+                    <div class="project-title">Spa at Home</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SERVICES SECTION WITH FULL DUMMY CONTENT ===== -->
+    <section class="services" id="services">
+        <div class="services-header">
+            <h2>Our <em>Expertise</em></h2>
+            <p>Comprehensive design solutions tailored to your vision</p>
+        </div>
+        <div class="services-grid">
+            <!-- Card 1: Architecture -->
+            <div class="service-card">
+                <div class="service-icon">🏛</div>
+                <h3>Architecture</h3>
+                <p>Structural design that honors both form and function. We create blueprints for living that stand the test of time while embracing modern aesthetics.</p>
+                <ul class="service-features">
+                    <li>Space Planning & Layout Design</li>
+                    <li>3D Visualization & Walkthroughs</li>
+                    <li>Structural Consultation</li>
+                    <li>Vastu-Compliant Designs</li>
+                    <li>Renovation & Remodeling</li>
+                </ul>
+            </div>
+
+            <!-- Card 2: Interior Design -->
+            <div class="service-card">
+                <div class="service-icon">🛋</div>
+                <h3>Interior Design</h3>
+                <p>Full-spectrum interior styling — from spatial planning to furniture curation, lighting design to material selection. Every element intentional.</p>
+                <ul class="service-features">
+                    <li>Custom Furniture Design</li>
+                    <li>Lighting & Ambience Planning</li>
+                    <li>Material & Texture Curation</li>
+                    <li>Color Palette Consultation</li>
+                    <li>Art & Decor Selection</li>
+                </ul>
+            </div>
+
+            <!-- Card 3: Design Consultation -->
+            <div class="service-card">
+                <div class="service-icon">✨</div>
+                <h3>Design Consultation</h3>
+                <p>Expert guidance for renovations, new builds, or refreshes. We help you make confident decisions that align with your vision and budget.</p>
+                <ul class="service-features">
+                    <li>Project Budget Planning</li>
+                    <li>Vendor & Contractor Management</li>
+                    <li>Site Supervision</li>
+                    <li>Project Timeline Management</li>
+                    <li>Post-Completion Support</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TEAM SECTION ===== -->
+    <section class="team" id="team">
+        <div class="team-header">
+            <h2>Our <em>Experts</em></h2>
+            <p>The visionaries and creators behind Navkaar Neev Studio</p>
+        </div>
+        <div class="team-grid">
+            <!-- Expert 1: Amit Shah -->
+            <div class="team-card">
+                <div class="team-img-wrapper">
+                    <img src="expert_amit.png" alt="Amit Shah" class="team-img" loading="lazy">
+                </div>
+                <div class="team-info">
+                    <h3>Amit Shah</h3>
+                    <span class="team-role">Founder & Principal Architect</span>
+                    <p class="team-bio">With over 12 years of experience, Amit oversees the architectural design direction, blending structural precision with sustainable aesthetics.</p>
+                </div>
+            </div>
+
+            <!-- Expert 2: Neha Sharma -->
+            <div class="team-card">
+                <div class="team-img-wrapper">
+                    <img src="expert_neha.png" alt="Neha Sharma" class="team-img" loading="lazy">
+                </div>
+                <div class="team-info">
+                    <h3>Neha Sharma</h3>
+                    <span class="team-role">Co-Founder & Lead Designer</span>
+                    <p class="team-bio">Neha specializes in bespoke interior styling and spatial design, creating soulful, functional interiors that tell our clients' unique stories.</p>
+                </div>
+            </div>
+
+            <!-- Expert 3: Rajesh Patel -->
+            <div class="team-card">
+                <div class="team-img-wrapper">
+                    <img src="expert_rajesh.png" alt="Rajesh Patel" class="team-img" loading="lazy">
+                </div>
+                <div class="team-info">
+                    <h3>Rajesh Patel</h3>
+                    <span class="team-role">Senior Consultant</span>
+                    <p class="team-bio">Rajesh leads structural optimization and technical consultation, ensuring every blueprint translates flawlessly into safe, buildable reality.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonial">
+        <div class="testimonial-line"></div>
+        <p class="testimonial-quote">"Navkaar Neev didn't just design our home — they understood our story. Every corner feels like us. It's not just beautiful; it's alive."</p>
+        <div class="testimonial-line"></div>
+        <p class="testimonial-author">— The Sharma Family, Mumbai</p>
+    </section>
+
+    <section class="contact" id="contact">
+        <h2>Let's Create<br><em>Together</em></h2>
+        <p>Your space deserves more than decoration. It deserves intention, craft, and soul. Start your journey with us.</p>
+        <a href="mailto:hello@navkaarneev.com" class="contact-btn">Begin Your Project →</a>
+        <div class="contact-details">
+            <span>hello@navkaarneev.com</span>
+            <span>+91 98XXX XXXXX</span>
+            <span>Mumbai, India</span>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 Navkaar Neev Studio. Crafted with intention.</p>
+    </footer>
+
+    <script>
+        // Nav Scroll Effect
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 100) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
+        });
+
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Hero Animations
+        gsap.to('.hero-label', { opacity: 1, y: 0, duration: 1, delay: 0.3, ease: 'power3.out' });
+        gsap.to('.hero-title', { opacity: 1, y: 0, duration: 1.2, delay: 0.5, ease: 'power3.out' });
+        gsap.to('.hero-desc', { opacity: 1, y: 0, duration: 1, delay: 0.8, ease: 'power3.out' });
+        gsap.to('.hero-cta', { opacity: 1, y: 0, duration: 1, delay: 1.1, ease: 'power3.out' });
+        gsap.to('.scroll-indicator', { opacity: 1, duration: 1, delay: 1.5 });
+
+        // Philosophy Section
+        gsap.from('.philosophy-text', {
+            scrollTrigger: { trigger: '.philosophy', start: 'top 80%' },
+            x: -60, opacity: 0, duration: 1.2, ease: 'power3.out'
+        });
+        gsap.from('.philosophy-visual', {
+            scrollTrigger: { trigger: '.philosophy', start: 'top 80%' },
+            x: 60, opacity: 0, duration: 1.2, delay: 0.2, ease: 'power3.out'
+        });
+
+        // Stats Counter Animation
+        document.querySelectorAll('.stat-number').forEach(stat => {
+            const target = parseInt(stat.textContent);
+            gsap.from(stat, {
+                scrollTrigger: { trigger: '.stats-bar', start: 'top 85%' },
+                textContent: 0,
+                duration: 2,
+                ease: 'power2.out',
+                snap: { textContent: 1 },
+                onUpdate: function() {
+                    stat.textContent = Math.ceil(this.targets()[0].textContent) + (stat.textContent.includes('+') ? '+' : '');
+                }
+            });
+        });
+
+        // Project Cards Stagger
+        gsap.from('.project-card', {
+            scrollTrigger: { trigger: '.projects-grid', start: 'top 80%' },
+            y: 80, opacity: 0, duration: 1,
+            stagger: 0.15, ease: 'power3.out'
+        });
+
+        // Service Cards - FIXED ANIMATION
+        gsap.from('.service-card', {
+            scrollTrigger: { trigger: '.services-grid', start: 'top 85%' },
+            y: 60, opacity: 0, duration: 1,
+            stagger: 0.2, ease: 'power3.out'
+        });
+
+        // Team Cards Animation
+        gsap.from('.team-card', {
+            scrollTrigger: { trigger: '.team-grid', start: 'top 85%' },
+            y: 60, opacity: 0, duration: 1,
+            stagger: 0.2, ease: 'power3.out'
+        });
+
+        // Testimonial
+        gsap.from('.testimonial-quote', {
+            scrollTrigger: { trigger: '.testimonial', start: 'top 80%' },
+            y: 40, opacity: 0, duration: 1.2, ease: 'power3.out'
+        });
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
